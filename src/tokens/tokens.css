@@ -1,0 +1,89 @@
+/**
+ * grAItt Studio — gedeelde design tokens.
+ *
+ * Bron: de daadwerkelijke kleurwaarden uit TravelCampGo (src/styles.css,
+ * gedefinieerd in oklch) en de categoriekleuren van de bestaande kostenmodule
+ * (src/routes/kosten.index.tsx, CATS). Hier omgezet naar hex zodat ze ook
+ * bruikbaar zijn in charts/PDF-export waar oklch niet altijd ondersteund is.
+ * Dit bestand is de bron van waarheid — geen kleur hardcoden buiten hier.
+ */
+
+:root {
+  --grait-radius: 1.1rem;
+
+  --grait-background: #f6f1e7;
+  --grait-foreground: #111b28;
+  --grait-card: #ffffff;
+  --grait-card-foreground: #111b28;
+
+  --grait-primary: #152a43;
+  --grait-primary-foreground: #fdf8ed;
+  --grait-secondary: #5a7d46;
+  --grait-secondary-foreground: #fbf8f1;
+  --grait-accent: #e1791b;
+  --grait-accent-foreground: #281606;
+
+  --grait-muted: #ebe7df;
+  --grait-muted-foreground: #565e69;
+  --grait-border: #dcd7cd;
+  --grait-input: #e6e1d6;
+  --grait-ring: #3a577a;
+
+  --grait-surface: #fcf8f0;
+  --grait-surface-2: #f0ebe0;
+
+  --grait-destructive: #df202e;
+  --grait-destructive-foreground: #fdf3f3;
+  --grait-warn: #f2a618;
+  --grait-warn-foreground: #281a06;
+  --grait-success: #488055;
+  --grait-success-foreground: #f3f8f4;
+
+  /* Categoriekleuren — 1:1 uit TravelCampGo's kostenmodule (CATS in
+     kosten.index.tsx), plus de nieuwe categorieën voor de onderhoudsapp
+     die er nog niet in TravelCampGo bestaan (hexwaarden zelf gekozen,
+     afgestemd op de rest van de palet). */
+  --grait-cat-brandstof: #e07a3c;
+  --grait-cat-onderhoud: #828282;
+  --grait-cat-reparatie: #c94a7a;
+  --grait-cat-banden: #7a5cff;
+  --grait-cat-verzekering: #4aa1c9;
+  --grait-cat-wegenbelasting: #1f6b46;
+  --grait-cat-keuring: #a3733c;
+  --grait-cat-stalling: #6b7d8f;
+  --grait-cat-camping: #1f6b46;
+  --grait-cat-tol: #7a5cff;
+  --grait-cat-boodschappen: #4aa1c9;
+  --grait-cat-restaurant: #c94a7a;
+  --grait-cat-overig: #a3a3a3;
+}
+
+.dark {
+  --grait-background: #090e14;
+  --grait-foreground: #f4f1ec;
+  --grait-card: #141b24;
+  --grait-card-foreground: #f4f1ec;
+
+  --grait-primary: #729bcf;
+  --grait-primary-foreground: #060c13;
+  --grait-secondary: #345123;
+  --grait-secondary-foreground: #f4f1ec;
+  --grait-accent: #ef852e;
+  --grait-accent-foreground: #110904;
+
+  --grait-muted: #1e252e;
+  --grait-muted-foreground: #aaa497;
+  --grait-border: rgb(255 255 255 / 12%);
+  --grait-input: rgb(255 255 255 / 15%);
+  --grait-ring: #7ba0d6;
+
+  --grait-surface: #10171f;
+  --grait-surface-2: #1b222b;
+
+  --grait-destructive: #ee343b;
+  --grait-destructive-foreground: #fdf3f3;
+  --grait-warn: #e89d00;
+  --grait-warn-foreground: #110904;
+  --grait-success: #4cb86a;
+  --grait-success-foreground: #0d1a10;
+}
