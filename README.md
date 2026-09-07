@@ -72,8 +72,10 @@ voor alle drie de apps ongeacht hun eigen databronnen.
 
 - [x] Stap 1: repo-structuur
 - [x] Stap 2: echte tokens uit TravelCampGo (zie boven voor de bron)
-- [ ] Stap 3: kostenmodule (`src/modules/costs/`) — config.ts met
-      `careGoConfig`/`campGoConfig`, consumption.ts, CostOverview.tsx,
-      CostEntryForm.tsx, export.ts
+- [x] Stap 3: kostenmodule (`src/modules/costs/`) — `careGoConfig`/`campGoConfig`
+      naast elkaar in config.ts, consumption.ts (l/100km per volle tank,
+      voortschrijdend gemiddelde, 15%-afwijkingsmelding), CostOverview.tsx,
+      CostEntryForm.tsx, export.ts. Build geverifieerd (`npm run build`).
 - [ ] Stap 4: aansluiten in TravelCareGo (tokens.css + tailwind-preset +
-      de nieuwe schermen)
+      de nieuwe schermen) — eerst architecture-/security-check vanwege de
+      nieuwe GPS-locatiepermissie
