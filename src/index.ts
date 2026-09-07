@@ -8,3 +8,4 @@ export { ListRow, type ListRowProps } from "./components/ListRow";
 export { ConfirmDialog, type ConfirmDialogProps } from "./components/ConfirmDialog";
 
 export * from "./modules/costs";
+export * from "./modules/admin";

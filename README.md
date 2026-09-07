@@ -18,7 +18,8 @@ grait-ui/
    │  ├─ tokens.css         CSS-variabelen — bron van waarheid voor kleuren
    │  └─ tokens.ts          zelfde waarden als JS-object (charts/PDF-export)
    ├─ components/           Button, Card, CategoryChip, AmountInput, ListRow, ConfirmDialog
-   └─ modules/costs/        kostenmodule (config.ts/consumption.ts/schermen) — nog te bouwen
+   ├─ modules/costs/        kostenmodule (config.ts/consumption.ts/schermen)
+   └─ modules/admin/        admin-dashboard-bouwstenen (StatKaart/WeekBarChart/GebruikersTabel)
 ```
 
 ## Kleuren: waar ze vandaan komen
@@ -60,7 +61,37 @@ Daarna zijn klassen als `bg-primary`, `text-secondary-foreground`,
 
 ```tsx
 import { Button, Card, CategoryChip, AmountInput, ListRow, ConfirmDialog, tokens, categorieKleuren } from "@grait/ui";
+import { StatKaart, WeekBarChart, GebruikersTabel } from "@grait/ui";
 ```
+
+## modules/admin — admin-dashboard-bouwstenen
+
+Gedistilleerd uit TravelCareGo's admin-scherm (gebruikerslijst met tier-
+wijzigen, #18, en het grafisch overzicht van gebruik, #19) nadat ook
+TravelCampGo's eigen (uitgebreidere, rollen-gebaseerde) admin-systeem is
+bekeken. Drie losse, herbruikbare bouwstenen, geen kant-en-klaar scherm:
+
+- **`StatKaart`** — één cijfer + label + optionele subtekst.
+- **`WeekBarChart`** — puur-CSS staafdiagram voor een tijdreeks (bv. nieuwe
+  registraties per week), geen chart-library.
+- **`GebruikersTabel`** — generieke tabel: e-mail, optionele extra kolommen
+  (per app verschillend, dus als render-functie meegegeven), en een
+  tier-select die `onWijzigTier` aanroept.
+
+**Bewust niet gedistilleerd** (blijft per-app):
+- De eigenlijke **toegangscontrole** (TravelCareGo: vaste e-maillijst
+  server-side; TravelCampGo: een rollen-systeem met owner/admin) - deze
+  bouwstenen doen zelf niets met authenticatie, de consumerende app bepaalt
+  wie het scherm te zien krijgt.
+- **Tabbladnavigatie** (TravelCampGo's `AdminTabs.tsx`) - te verweven met
+  hun rollen-systeem en eigen router om nu al zinvol te generaliseren.
+- **Data-ophalen/aggregatie** - blijft app-specifiek (Edge Function per app,
+  zie TravelCareGo's `admin-gebruikers`/`admin-statistieken` als voorbeeld).
+
+TravelCareGo zelf is **niet** omgebouwd om deze bouwstenen via de package
+te gebruiken - dezelfde architectuurkeuze als bij de kostenmodule (zie
+hieronder): eerst bewijzen dat het patroon standhoudt zodra een tweede app
+het ook gebruikt, dan pas overstappen op de echte dependency.
 
 ## Belangrijk: geen data-ophalen in deze package
 
@@ -76,6 +107,12 @@ voor alle drie de apps ongeacht hun eigen databronnen.
       naast elkaar in config.ts, consumption.ts (l/100km per volle tank,
       voortschrijdend gemiddelde, 15%-afwijkingsmelding), CostOverview.tsx,
       CostEntryForm.tsx, export.ts. Build geverifieerd (`npm run build`).
-- [ ] Stap 4: aansluiten in TravelCareGo (tokens.css + tailwind-preset +
-      de nieuwe schermen) — eerst architecture-/security-check vanwege de
-      nieuwe GPS-locatiepermissie
+- [x] Stap 4 (herzien): TravelCareGo kreeg de kostenmodule wél (#164), maar
+      als geport/gekopieerde code in eigen stijl (`--ccg-*`-tokens, geen
+      Tailwind-utility-klassen) i.p.v. een live afhankelijkheid van dit
+      package - besluit van de architecture-/security-agent-check (nieuwe
+      GPS-permissie + package nog zonder tests/versie). tokens.css/
+      tailwind-preset worden dus (nog) nergens echt geïmporteerd.
+- [x] `modules/admin`: gedistilleerd uit TravelCareGo's admin-scherm (#166,
+      zie hierboven) - StatKaart, WeekBarChart, GebruikersTabel. Zelfde
+      vendor-eerst-keuze: nog geen app die dit als live dependency gebruikt.
