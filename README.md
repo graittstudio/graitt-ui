@@ -128,4 +128,4 @@ gepubliceerd hoeft te worden. `recharts`, `lucide-react` en react zijn peer
 dependencies en installeert de app zelf. `xlsx` en `jspdf` zijn optioneel en
 alleen nodig als de app de exportmodule gebruikt.
 
-In CI werkt dit alleen met toegang tot deze repo, zolang die privé is.
+Deze repo is openbaar, dus dit werkt ook in CI zonder token.
