@@ -116,3 +116,16 @@ voor alle drie de apps ongeacht hun eigen databronnen.
 - [x] `modules/admin`: gedistilleerd uit TravelCareGo's admin-scherm (#166,
       zie hierboven) - StatKaart, WeekBarChart, GebruikersTabel. Zelfde
       vendor-eerst-keuze: nog geen app die dit als live dependency gebruikt.
+
+## Installeren in een app
+
+```bash
+npm i github:graittstudio/graitt-ui
+```
+
+Het `prepare`-script bouwt de bundel tijdens de installatie, zodat er niets
+gepubliceerd hoeft te worden. `recharts`, `lucide-react` en react zijn peer
+dependencies en installeert de app zelf. `xlsx` en `jspdf` zijn optioneel en
+alleen nodig als de app de exportmodule gebruikt.
+
+In CI werkt dit alleen met toegang tot deze repo, zolang die privé is.
