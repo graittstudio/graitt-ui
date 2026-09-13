@@ -28,7 +28,11 @@ export function ConfirmDialog({
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" role="dialog" aria-modal="true">
-      <div className="w-full max-w-sm rounded-t-2xl bg-card p-5 text-card-foreground sm:rounded-2xl">
+      {/* Onderin de ruimte van de navigatiebalk van de telefoon erbij. Zonder dat
+          vallen de knoppen op Android 15 en later achter de terugknop en de
+          veegbalk, want de app tekent daar sinds die versie onder door. Op een
+          scherm zonder zo'n balk is de extra ruimte nul. */}
+      <div className="w-full max-w-sm rounded-t-2xl bg-card p-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)] text-card-foreground sm:rounded-2xl sm:pb-5">
         <div className="mb-1 text-lg font-semibold">{title}</div>
         {description && <p className="mb-4 text-sm text-muted-foreground">{description}</p>}
         <div className="flex gap-2">
