@@ -9,3 +9,4 @@ export { ConfirmDialog, type ConfirmDialogProps } from "./components/ConfirmDial
 
 export * from "./modules/costs";
 export * from "./modules/admin";
+export * from "./modules/juridisch";
