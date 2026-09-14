@@ -17,7 +17,8 @@ grait-ui/
    ├─ tokens/
    │  ├─ tokens.css         CSS-variabelen — bron van waarheid voor kleuren
    │  └─ tokens.ts          zelfde waarden als JS-object (charts/PDF-export)
-   ├─ components/           Button, Card, CategoryChip, AmountInput, ListRow, ConfirmDialog
+   ├─ components/           Button, Card, CategoryChip, AmountInput, ListRow, ConfirmDialog,
+   │                        SortableGrid, Toaster
    ├─ modules/costs/        kostenmodule (config.ts/consumption.ts/schermen)
    ├─ modules/admin/        admin-dashboard-bouwstenen (StatKaart/WeekBarChart/GebruikersTabel)
    └─ modules/juridisch/    links naar privacy/voorwaarden/verwijderen op graittstudio.com
