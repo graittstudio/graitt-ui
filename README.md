@@ -19,7 +19,8 @@ grait-ui/
    │  └─ tokens.ts          zelfde waarden als JS-object (charts/PDF-export)
    ├─ components/           Button, Card, CategoryChip, AmountInput, ListRow, ConfirmDialog
    ├─ modules/costs/        kostenmodule (config.ts/consumption.ts/schermen)
-   └─ modules/admin/        admin-dashboard-bouwstenen (StatKaart/WeekBarChart/GebruikersTabel)
+   ├─ modules/admin/        admin-dashboard-bouwstenen (StatKaart/WeekBarChart/GebruikersTabel)
+   └─ modules/juridisch/    links naar privacy/voorwaarden/verwijderen op graittstudio.com
 ```
 
 ## Kleuren: waar ze vandaan komen
@@ -92,6 +93,37 @@ TravelCareGo zelf is **niet** omgebouwd om deze bouwstenen via de package
 te gebruiken - dezelfde architectuurkeuze als bij de kostenmodule (zie
 hieronder): eerst bewijzen dat het patroon standhoudt zodra een tweede app
 het ook gebruikt, dan pas overstappen op de echte dependency.
+
+## modules/juridisch — links naar privacy, voorwaarden en account verwijderen
+
+Privacy, voorwaarden en accountverwijdering staan per app op graittstudio.com,
+gemaakt uit één sjabloon in `graittstudio/graitt-site` (`maak-juridisch.py`).
+Een app herhaalt die tekst niet, maar linkt ernaar (#14).
+
+- **`juridischeAdressen(app)`** geeft de drie adressen voor een app, bv.
+  `juridischeAdressen("travelspendgo").privacy`.
+- **`JuridischeLinks`** is de kaart in de app: de korte versie als children,
+  drie regels naar de volledige teksten, en het contactadres.
+
+```tsx
+import { JuridischeLinks } from "@grait/ui";
+import { Browser } from "@capacitor/browser";
+
+<JuridischeLinks
+  app="travelspendgo"
+  labels={{ privacy: t("privacy"), voorwaarden: t("voorwaarden"), verwijderen: t("verwijderen"), contact: t("contact") }}
+  onOpen={(adres) => void Browser.open({ url: adres })}
+>
+  <p>{t("kortOverzicht")}</p>
+</JuridischeLinks>
+```
+
+Labels zijn verplicht en hebben geen Nederlandse standaard (zie #3). De stijl
+gebruikt de `--grait-*`-variabelen met terugvalwaarden, dus hij werkt ook in
+een app zonder de Tailwind-preset.
+
+Een nieuwe app krijgt eerst een blok in `maak-juridisch.py` en de pagina's
+online; pas dan kloppen de links.
 
 ## Belangrijk: geen data-ophalen in deze package
 
