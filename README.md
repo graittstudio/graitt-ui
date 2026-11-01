@@ -20,7 +20,8 @@ grait-ui/
    ├─ components/           Button, Card, CategoryChip, AmountInput, ListRow, ConfirmDialog
    ├─ modules/costs/        kostenmodule (config.ts/consumption.ts/schermen)
    ├─ modules/admin/        admin-dashboard-bouwstenen (StatKaart/WeekBarChart/GebruikersTabel)
-   └─ modules/juridisch/    links naar privacy/voorwaarden/verwijderen op graittstudio.com
+   ├─ modules/juridisch/    links naar privacy/voorwaarden/verwijderen op graittstudio.com
+   └─ modules/playstore/    Play Store-bouwstenen (zie docs/PLAY-STORE.md)
 ```
 
 ## Kleuren: waar ze vandaan komen
@@ -124,6 +125,34 @@ een app zonder de Tailwind-preset.
 
 Een nieuwe app krijgt eerst een blok in `maak-juridisch.py` en de pagina's
 online; pas dan kloppen de links.
+
+## modules/playstore — wat elke app voor de Play Store nodig heeft
+
+**Afspraak:** elke nieuwe grAItt-app krijgt deze bouwstenen meteen vanaf het
+begin mee, zonder eerst te vragen. De volledige lijst met eisen (app én Play
+Console) staat in [`docs/PLAY-STORE.md`](docs/PLAY-STORE.md).
+
+- **`ToestemmingUitleg`**: uitleg vóór een gevoelige toestemming (locatie,
+  camera, microfoon, meldingen), pas daarna de systeemvraag.
+- **`AccountVerwijderen`**: verwijderen in de app, met bevestiging en het
+  webadres erbij (`juridischeAdressen(app).verwijderen`).
+- **`MeldenOfBlokkeren`**: voor alles wat andere gebruikers kunnen zien.
+- **`PLAY_STORE_EISEN`** / **`PLAY_DOEL_API`**: de lijst als data.
+
+```tsx
+import { AccountVerwijderen, juridischeAdressen } from "@grait/ui";
+
+<AccountVerwijderen
+  labels={t("accountVerwijderen", { returnObjects: true })}
+  onVerwijder={async () => { const { error } = await supabase.functions.invoke("verwijder-account"); if (error) throw error; }}
+  onVerwijderd={() => void supabase.auth.signOut()}
+  webAdres={juridischeAdressen("travelspendgo").verwijderen}
+  onOpen={(adres) => void Browser.open({ url: adres })}
+/>
+```
+
+Zoals overal hier: alle teksten als verplichte `labels`, geen data-ophalen in
+de package.
 
 ## Belangrijk: geen data-ophalen in deze package
 
