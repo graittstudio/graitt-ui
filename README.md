@@ -21,7 +21,8 @@ grait-ui/
    ├─ modules/costs/        kostenmodule (config.ts/consumption.ts/schermen)
    ├─ modules/admin/        admin-dashboard-bouwstenen (StatKaart/WeekBarChart/GebruikersTabel)
    ├─ modules/juridisch/    links naar privacy/voorwaarden/verwijderen op graittstudio.com
-   └─ modules/playstore/    Play Store-bouwstenen (zie docs/PLAY-STORE.md)
+   ├─ modules/playstore/    Play Store-bouwstenen (zie docs/PLAY-STORE.md)
+   └─ modules/updates/      hamburgermenu met rood bolletje + updatecontrole (APK buiten de Play Store)
 ```
 
 ## Kleuren: waar ze vandaan komen
@@ -154,11 +155,44 @@ import { AccountVerwijderen, juridischeAdressen } from "@grait/ui";
 Zoals overal hier: alle teksten als verplichte `labels`, geen data-ophalen in
 de package.
 
+## modules/updates — hamburgermenu met rood bolletje en updates
+
+Voor apps die als APK buiten de Play Store rondgaan. Zelfde patroon als
+TravelCareGo, TripSpendGo/HomeSpendGo en Close2U: naast de APK staat een
+versiebestand (`versie-<app>.json` in de openbare bucket `downloads`):
+
+```json
+{"versie":"0.3.2","url":"https://…/instantcleango-0.3.2-<hex>.apk","wat":"Eén regel","wat_per_taal":{"en":"…"}}
+```
+
+- **`useUpdate({ adres, huidigeVersie, opToestel, uitgezet })`**: één keer
+  bovenin de app; kijkt bij openen, elke 10 minuten en als de app terug in
+  beeld komt. `uitgezet: true` in de Play-build (Play-eis *geen eigen updater*).
+- **`Hoofdmenu`**: hamburgerknop met rood bolletje; elke regel kan zijn eigen
+  bolletje hebben, zodat het de weg wijst naar *Updates*. Uit te breiden met
+  wat de app maar nodig heeft.
+- **`UpdateKaart`**: eigen versie, wat er nieuw is en de knop om op te halen
+  (op een toestel opent de browser de APK; op het web: vernieuwen).
+- **`isNieuwer`** / **`zoekUitgave`** / **`watIsNieuw`** los te gebruiken.
+
+```tsx
+const uitgave = useUpdate({ adres: UPDATE_ADRES, huidigeVersie: __APP_VERSION__, opToestel: Capacitor.isNativePlatform() });
+
+<Hoofdmenu label="Menu" bolletje={!!uitgave} items={[
+  { sleutel: "updates", label: "Updates", bolletje: !!uitgave, onKies: () => ga("updates") },
+  { sleutel: "over", label: "Over", onKies: () => ga("over") },
+]} />
+```
+
 ## Belangrijk: geen data-ophalen in deze package
 
 Componenten en modules krijgen data via props. Supabase/Dexie/lokale opslag
 hoort in de consumerende app, niet hier — dat houdt de package herbruikbaar
 voor alle drie de apps ongeacht hun eigen databronnen.
+
+Eén uitzondering: `modules/updates` haalt zelf het openbare versiebestand op
+(één `fetch` van een statisch JSON-bestand, zonder inlog). Het adres geeft de
+app mee.
 
 ## Status
 
