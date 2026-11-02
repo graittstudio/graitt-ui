@@ -10,3 +10,5 @@ export { ConfirmDialog, type ConfirmDialogProps } from "./components/ConfirmDial
 export * from "./modules/costs";
 export * from "./modules/admin";
 export * from "./modules/juridisch";
+export * from "./modules/playstore";
+export * from "./modules/updates";

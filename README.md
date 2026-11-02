@@ -20,7 +20,9 @@ grait-ui/
    ├─ components/           Button, Card, CategoryChip, AmountInput, ListRow, ConfirmDialog
    ├─ modules/costs/        kostenmodule (config.ts/consumption.ts/schermen)
    ├─ modules/admin/        admin-dashboard-bouwstenen (StatKaart/WeekBarChart/GebruikersTabel)
-   └─ modules/juridisch/    links naar privacy/voorwaarden/verwijderen op graittstudio.com
+   ├─ modules/juridisch/    links naar privacy/voorwaarden/verwijderen op graittstudio.com
+   ├─ modules/playstore/    Play Store-bouwstenen (zie docs/PLAY-STORE.md)
+   └─ modules/updates/      hamburgermenu met rood bolletje + updatecontrole (APK buiten de Play Store)
 ```
 
 ## Kleuren: waar ze vandaan komen
@@ -125,11 +127,72 @@ een app zonder de Tailwind-preset.
 Een nieuwe app krijgt eerst een blok in `maak-juridisch.py` en de pagina's
 online; pas dan kloppen de links.
 
+## modules/playstore — wat elke app voor de Play Store nodig heeft
+
+**Afspraak:** elke nieuwe grAItt-app krijgt deze bouwstenen meteen vanaf het
+begin mee, zonder eerst te vragen. De volledige lijst met eisen (app én Play
+Console) staat in [`docs/PLAY-STORE.md`](docs/PLAY-STORE.md).
+
+- **`ToestemmingUitleg`**: uitleg vóór een gevoelige toestemming (locatie,
+  camera, microfoon, meldingen), pas daarna de systeemvraag.
+- **`AccountVerwijderen`**: verwijderen in de app, met bevestiging en het
+  webadres erbij (`juridischeAdressen(app).verwijderen`).
+- **`MeldenOfBlokkeren`**: voor alles wat andere gebruikers kunnen zien.
+- **`PLAY_STORE_EISEN`** / **`PLAY_DOEL_API`**: de lijst als data.
+
+```tsx
+import { AccountVerwijderen, juridischeAdressen } from "@grait/ui";
+
+<AccountVerwijderen
+  labels={t("accountVerwijderen", { returnObjects: true })}
+  onVerwijder={async () => { const { error } = await supabase.functions.invoke("verwijder-account"); if (error) throw error; }}
+  onVerwijderd={() => void supabase.auth.signOut()}
+  webAdres={juridischeAdressen("travelspendgo").verwijderen}
+  onOpen={(adres) => void Browser.open({ url: adres })}
+/>
+```
+
+Zoals overal hier: alle teksten als verplichte `labels`, geen data-ophalen in
+de package.
+
+## modules/updates — hamburgermenu met rood bolletje en updates
+
+Voor apps die als APK buiten de Play Store rondgaan. Zelfde patroon als
+TravelCareGo, TripSpendGo/HomeSpendGo en Close2U: naast de APK staat een
+versiebestand (`versie-<app>.json` in de openbare bucket `downloads`):
+
+```json
+{"versie":"0.3.2","url":"https://…/instantcleango-0.3.2-<hex>.apk","wat":"Eén regel","wat_per_taal":{"en":"…"}}
+```
+
+- **`useUpdate({ adres, huidigeVersie, opToestel, uitgezet })`**: één keer
+  bovenin de app; kijkt bij openen, elke 10 minuten en als de app terug in
+  beeld komt. `uitgezet: true` in de Play-build (Play-eis *geen eigen updater*).
+- **`Hoofdmenu`**: hamburgerknop met rood bolletje; elke regel kan zijn eigen
+  bolletje hebben, zodat het de weg wijst naar *Updates*. Uit te breiden met
+  wat de app maar nodig heeft.
+- **`UpdateKaart`**: eigen versie, wat er nieuw is en de knop om op te halen
+  (op een toestel opent de browser de APK; op het web: vernieuwen).
+- **`isNieuwer`** / **`zoekUitgave`** / **`watIsNieuw`** los te gebruiken.
+
+```tsx
+const uitgave = useUpdate({ adres: UPDATE_ADRES, huidigeVersie: __APP_VERSION__, opToestel: Capacitor.isNativePlatform() });
+
+<Hoofdmenu label="Menu" bolletje={!!uitgave} items={[
+  { sleutel: "updates", label: "Updates", bolletje: !!uitgave, onKies: () => ga("updates") },
+  { sleutel: "over", label: "Over", onKies: () => ga("over") },
+]} />
+```
+
 ## Belangrijk: geen data-ophalen in deze package
 
 Componenten en modules krijgen data via props. Supabase/Dexie/lokale opslag
 hoort in de consumerende app, niet hier — dat houdt de package herbruikbaar
 voor alle drie de apps ongeacht hun eigen databronnen.
+
+Eén uitzondering: `modules/updates` haalt zelf het openbare versiebestand op
+(één `fetch` van een statisch JSON-bestand, zonder inlog). Het adres geeft de
+app mee.
 
 ## Status
 
