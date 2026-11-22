@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { Knik } from "../../components/Knik";
 
 /**
  * Het hamburgermenu rechtsboven, met een rood bolletje als er iets is (een
@@ -41,14 +42,6 @@ export function Bolletje({ stijl }: { stijl?: CSSProperties }) {
   );
 }
 
-function Hamburger() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
-      <path d="M4 7h16M4 12h16M4 17h16" />
-    </svg>
-  );
-}
-
 export function Hoofdmenu({ items, bolletje, label, knopStijl, knopKlasse }: HoofdmenuProps) {
   const [open, zetOpen] = useState(false);
   const knop = useRef<HTMLButtonElement>(null);
@@ -68,6 +61,7 @@ export function Hoofdmenu({ items, bolletje, label, knopStijl, knopKlasse }: Hoo
 
   return (
     <div style={{ position: "relative" }}>
+      <style>{".grait-hoofdmenu-knop:focus-visible{outline:2px solid var(--grait-primary,currentColor);outline-offset:2px}"}</style>
       <button
         ref={knop}
         type="button"
@@ -75,7 +69,7 @@ export function Hoofdmenu({ items, bolletje, label, knopStijl, knopKlasse }: Hoo
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={label}
-        className={knopKlasse}
+        className={`grait-hoofdmenu-knop${knopKlasse ? " " + knopKlasse : ""}`}
         style={{
           position: "relative",
           display: "flex",
@@ -91,7 +85,7 @@ export function Hoofdmenu({ items, bolletje, label, knopStijl, knopKlasse }: Hoo
           ...knopStijl,
         }}
       >
-        <Hamburger />
+        <Knik open={open} />
         {bolletje && <Bolletje stijl={{ position: "absolute", top: 8, right: 8, boxShadow: "0 0 0 2px var(--grait-card, #fff)" }} />}
       </button>
 
