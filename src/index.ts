@@ -6,7 +6,10 @@ export { CategoryChip, type CategoryChipProps } from "./components/CategoryChip"
 export { AmountInput, type AmountInputProps } from "./components/AmountInput";
 export { ListRow, type ListRowProps } from "./components/ListRow";
 export { ConfirmDialog, type ConfirmDialogProps } from "./components/ConfirmDialog";
+export { Knik, type KnikProps } from "./components/Knik";
 
 export * from "./modules/costs";
 export * from "./modules/admin";
 export * from "./modules/juridisch";
+export * from "./modules/playstore";
+export * from "./modules/updates";
