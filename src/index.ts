@@ -7,6 +7,7 @@ export { AmountInput, type AmountInputProps } from "./components/AmountInput";
 export { ListRow, type ListRowProps } from "./components/ListRow";
 export { ConfirmDialog, type ConfirmDialogProps } from "./components/ConfirmDialog";
 export { Knik, type KnikProps } from "./components/Knik";
+export { useZwaai, ZwaaiHand } from "./components/Zwaai";
 
 export * from "./modules/costs";
 export * from "./modules/admin";
