@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { Knik } from "../../components/Knik";
+import { useZwaai, ZwaaiHand } from "../../components/Zwaai";
 
 /**
  * Het hamburgermenu rechtsboven, met een rood bolletje als er iets is (een
@@ -45,6 +46,7 @@ export function Bolletje({ stijl }: { stijl?: CSSProperties }) {
 export function Hoofdmenu({ items, bolletje, label, knopStijl, knopKlasse }: HoofdmenuProps) {
   const [open, zetOpen] = useState(false);
   const knop = useRef<HTMLButtonElement>(null);
+  const { zwaait, proefProps } = useZwaai(open);
 
   // Escape sluit het menu en zet de aandacht terug op de knop.
   useEffect(() => {
@@ -62,8 +64,10 @@ export function Hoofdmenu({ items, bolletje, label, knopStijl, knopKlasse }: Hoo
   return (
     <div style={{ position: "relative" }}>
       <style>{".grait-hoofdmenu-knop:focus-visible{outline:2px solid var(--grait-primary,currentColor);outline-offset:2px}"}</style>
+      <ZwaaiHand zwaait={zwaait} />
       <button
         ref={knop}
+        {...proefProps}
         type="button"
         onClick={() => zetOpen((was) => !was)}
         aria-haspopup="menu"
